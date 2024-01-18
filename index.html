@@ -203,21 +203,21 @@
     </style>
   </head>
   <body>
-    <header><h1>short</h1></header>
+    <header><h1>hort</h1></header>
     <main x-data="app" x-cloak>
       <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
-      <input placeholder="Your URL..." x-model="url" x-ref="url" />
+      <input placeholder="Input your URL." x-model="url" x-ref="url" />
       <details>
-        <summary>Custom Setting</summary>
+        <summary>Custom Set</summary>
         <div>
           <input placeholder="slug" x-model="slug" />
-          <small>Slug is randomly generated short ID.</small>
+          <small>Slug is random id。</small>
         </div>
       </details>
-      <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)">shorten</button>
+      <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)">Shorten</button>
     </main>
     <footer>
-     [iGengdu](https://www.igengdu.com)
+     <a herf="https://www.igengdu.com">igdu</a>
     </footer>
     <script src="asset/js/alpine.js"></script>
     <script>
@@ -231,12 +231,11 @@
         },
         submit ($refs, $nextTick) {
           if (!this.url) {
-            this.alert = { type: 'error', message: '缺必需参数：url。' }
+            this.alert = { type: 'error', message: 'No url, Input first' }
             return
           }
-
           if (this.isValidated()) {
-            this.alert = { type: 'error', message: '非法格式：url。' }
+            this.alert = { type: 'error', message: 'Illegal url' }
             return
           }
 
@@ -253,23 +252,22 @@
           })
             .then(res => res.json())
             .then(res => {
-              this.loading = false
+              this.loading = false;
               if (res.message) {
-                this.alert = { type: 'error', message: res.message }
+                this.alert = { type: 'error', message: res.message };
                 return
               }
 
               this.url = res.link
 
               $nextTick(() => {
-                $refs.url.select()
-                this.alert = { type: 'success', message: `links ${document.execCommand('Copy') ? 'Copy' : 'Dine'} ` }
-              })
-            })
-            .catch(e => {
-              this.alert = { type: 'error', message: e.message }
-              this.loading = false
-            })
+                $refs.url.select();
+                const successful = document.execCommand('copy');
+                this.alert = { type: 'success', message: successful ? 'Link copied!' : 'Failed to copy'};
+              });
+             })
+            .catch(e => { this.loading = false; 
+                           this.alert = { type: 'error', message: e.message }; });
         }
       }
     </script>
