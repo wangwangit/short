@@ -31,7 +31,6 @@ Use Cloudflare Pages to create Shortener of URL
  2.2 In Workers and Pages, select pages, create a project,  connect to git, choose your forked git program.
 
  2.3 Set up builds and deployments, choose the default setting. Waiting Cloudflare's deploying, then it will be ok.
- 
 
 3. Creat database D1 to store the necessary data. Choose D1, create database, give a name as you like for this D1(such as Shorturl) , create and it's ok for D1 with name Shorturl.
    Refer to [D1's create](https://github.com/x-dr/telegraph-Image/blob/main/docs/manage.md)
