@@ -12,7 +12,8 @@ Please consider supporting DartNode as they are not only supporting us but also 
 
 Use Cloudflare Pages to create Shortener of URL
 
-*Demo* : [https://d.igdu.xyz/](https://d.igdu.xyz/)
+*My Demo* : [https://d.igdu.xyz/](https://d.igdu.xyz/)
+*Original author's Demo* : [https://d.131213.xyz/](https://d.131213.xyz/)
 
 
 
