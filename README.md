@@ -8,26 +8,33 @@ Please consider supporting DartNode as they are not only supporting us but also 
 
 
 
-## 介绍
+## Introduction
 
-一个使用 Cloudflare Pages 创建的 URL 缩短器
+Use Cloudflare Pages to create Shortener of URL
 
 *Demo* : [https://d.igdu.xyz/](https://d.igdu.xyz/)
 
 
 
-### 利用Cloudflare pages部署
+### Use Cloudflare pages to deploy
 
+### Steps are as follows
 
-1. Fork本项目，如果需要可适当修改。
-    **说明** ：非常感谢原作者的贡献。我在原项目[https://github.com/x-dr/short](https://github.com/x-dr/short)基础上，做了细微调整：
-   包括修改页脚文字，修改生产短链后的动作等。你如果也想自己部署一个同样的短网址服务，可以在Fork本项目之后，在index.js中修改相应的代码。
-2. 登录到[Cloudflare](https://dash.cloudflare.com/)控制台.
-3. 在帐户主页中，选择`pages`> ` Create a project` > `Connect to Git`
-4. 选择你创建的项目存储库，在`Set up builds and deployments`部分中，全部默认即可。
-5. 点击`Save and Deploy`，稍等片刻，你的网站就部署好了。
-6. 创建D1数据库，自己取名，如命名为Shorturl；参考[这里](https://github.com/x-dr/telegraph-Image/blob/main/docs/manage.md)
-7. 在works and pages控制台，执行sql命令创建表（在控制台输入框粘贴下面语句执行即可）
+1.Fork this project, name it as you like, such as Short. I have made some change baseed on the original project [https://github.com/x-dr/short](https://github.com/x-dr/short), such as add
+  footer website and the action after shortening the URL. Thanks for the original project and it's author.
+
+2.Connect this git project with your Cloudflare Pages and deploy your project.
+ 2.1 Creat and login in your Cloudflare account;
+ 
+ 2.2 In Workers and Pages, select pages, create a project,  connect to git, choose your forked git program.
+
+ 2.3 Set up builds and deployments, choose the default setting. Waiting Cloudflare's deploying, then it will be ok.
+ 
+
+3. Creat database D1 to store the necessary data. Choose D1, create database, give a name as you like for this D1(such as Shorturl) , create and it's ok for D1 with name Shorturl.
+   Refer to [D1's create](https://github.com/x-dr/telegraph-Image/blob/main/docs/manage.md)
+
+4.Go to the workers and pages's console to put and execute the SQL commands. Commands are as follow, just copy them and put them to console station to execute them.
 
 ```sql
 DROP TABLE IF EXISTS links;
@@ -52,26 +59,30 @@ CREATE TABLE IF NOT EXISTS logs (
 );
 
 ```
-8. 选择部署完成short项目，前往后台依次点击`设置`->`函数`->`D1 数据库绑定`->`编辑绑定`->变量名称填写：`DB`   命名空间选择 `你提前创建好的D1数据库名称，如shorturl`；最终完成数据库的绑定。
 
-9. 重新部署项目，最终完成。这里必须要重新部署，否则会提示错误。
-    
-10. 该服务基于Cloudflare提供的免费的轻量服务，请勿乱用、滥用。谢谢原作者和Github。
+5.Bind your project with D1 database. In your Workers and pages, choose your forked project Short, click as follow:
+  Setting->->Function->->D1 database bindings->->Edit bingds->->Variable name, You must put DB->->Namespace, put your D1's name, such as Shorturl->->Binding and Done well.
+
+6. Redeploe the project, or you will see the errors. In your Workers and pages, choose your forked project Short, Deployments, Redeploy the project.
+
+7. If you like, your project could works well with Cloudflare's subdomain, such as short-994.pages.dev. If you want to Custom the project domain, in Cloudflare's forked project,
+   choose the custom domian setting, then bind your domain. Then you could surf your project with your domain, such as d.igdud.xyz.
+
+8. Enjoy it. If you like or it helps you, please star it. Thanks. 
 
 
 ### API
 
-#### 短链生成
+#### Shorturl create
 
 ```bash
 # POST /create
 curl -X POST -H "Content-Type: application/json" -d '{"url":"https://131213.xyz"}' https://d.131213.xyz/create
 
-# 指定slug
+# Dedicated slug
 curl -X POST -H "Content-Type: application/json" -d '{"url":"https://131213.xyz","slug":"scxs"}' https://d.131213.xyz/create
 
 ```
-
 
 
 > response:
