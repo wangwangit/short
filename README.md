@@ -22,20 +22,18 @@ Use Cloudflare Pages to create Shortener of URL
 
 ### Steps are as follows
 
-1.Fork this project, name it as you like, such as Short. I have made some change baseed on the original project [https://github.com/x-dr/short](https://github.com/x-dr/short), such as add
+  1.Fork this project, name it as you like, such as Short. I have made some change baseed on the original project [https://github.com/x-dr/short](https://github.com/x-dr/short), such as add
   footer website and the action after shortening the URL. Thanks for the original project and it's author.
 
-2.Connect this git project with your Cloudflare Pages and deploy your project.
- 2.1 Creat and login in your Cloudflare account;
+  2.Connect this git project with your Cloudflare Pages and deploy your project.
+   2.1 Creat and login in your Cloudflare account;
  
- 2.2 In Workers and Pages, select pages, create a project,  connect to git, choose your forked git program.
+   2.2 In Workers and Pages, select pages, create a project,  connect to git, choose your forked git program.
 
- 2.3 Set up builds and deployments, choose the default setting. Waiting Cloudflare's deploying, then it will be ok.
-
-3. Creat database D1 to store the necessary data. Choose D1, create database, give a name as you like for this D1(such as Shorturl) , create and it's ok for D1 with name Shorturl.
+   2.3 Set up builds and deployments, choose the default setting. Waiting Cloudflare's deploying, then it will be ok.
+  3. Creat database D1 to store the necessary data. Choose D1, create database, give a name as you like for this D1(such as Shorturl) , create and it's ok for D1 with name Shorturl.
    Refer to [D1's create](https://github.com/x-dr/telegraph-Image/blob/main/docs/manage.md)
-
-4.Go to the workers and pages's console to put and execute the SQL commands. Commands are as follow, just copy them and put them to console station to execute them.
+  4.Go to the workers and pages's console to put and execute the SQL commands. Commands are as follow, just copy them and put them to console station to execute them.
 
 ```sql
 DROP TABLE IF EXISTS links;
@@ -60,7 +58,6 @@ CREATE TABLE IF NOT EXISTS logs (
 );
 
 ```
-
 5.Bind your project with D1 database. In your Workers and pages, choose your forked project Short, click as follow:
   Setting->->Function->->D1 database bindings->->Edit bingds->->Variable name, You must put DB->->Namespace, put your D1's name, such as Shorturl->->Binding and Done well.
 
