@@ -8,7 +8,7 @@
 
 
 
-### Use Cloudflare pages to deploy
+## Installatin: Use Cloudflare pages to deploy
 
 ### Steps are as follows
 
@@ -53,12 +53,11 @@ CREATE TABLE IF NOT EXISTS logs (
 
 5.Bind your project with D1 database. In your Workers and pages, choose your forked project Short, click as follow:
 
-  Setting->->Function->->D1 database bindings->->Edit bingds->->Variable name, You must put DB->->Namespace, put your D1's name, such as Shorturl->->Binding and Done well.
+Setting->->Function->->D1 database bindings->->Edit bingds->->Variable name, You must put DB->->Namespace, put your D1's name, such as Shorturl->->Binding and Done well.
 
-6.Redeploe the project, or you will see the errors. In your Workers and pages, choose your forked project Short, Deployments, Redeploy the project.
+6.Redeploy the project, otherwise you will see the errors. Methods: In your Workers and pages, choose your forked project Short, Deployments, Redeploy the project.
 
-7.If you like, your project could works well with Cloudflare's subdomain, such as short-994.pages.dev. If you want to Custom the project domain, in Cloudflare's forked project,
-choose the custom domian setting, then bind your domain. Then you could surf your project with your domain, such as d.igdud.xyz.
+7.If you like, your project could works well with Cloudflare's subdomain, such as short-998.pages.dev. If you want to Custom the project domain, in Cloudflare's forked project,choose the custom domian setting, then bind your domain. Then you could surf your project with your domain, such as d.igdud.xyz.
 
 8.Enjoy it. If you like or it helps you, please star it. Thanks. 
 
