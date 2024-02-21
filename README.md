@@ -2,7 +2,7 @@
 
 **Introduction**: Use Cloudflare Pages to create Shortener of URL
 
-*My Demo* : [https://d.igdu.xyz/](https://d.igdu.xyz/);
+*My Demo*  : [https://d.igdu.xyz/](https://d.igdu.xyz/);
 
 *Original author's Demo* : [https://d.131213.xyz/](https://d.131213.xyz/)
 
@@ -12,7 +12,7 @@
 
 ### Steps are as follows
 
-1.Fork this project, name it as you like, such as Short. I have made some change baseed on the original project [https://github.com/x-dr/short](https://github.com/x-dr/short), such as add footer website and the action after shortening the URL. Thanks for the original project and it's author.
+1.Fork this project, name it as you like, such as "Short". I have made some change based on the original project [https://github.com/x-dr/short](https://github.com/x-dr/short), such as adding footer of website and the action after shortening the URL. Thanks for the original project and it's author.
 
 2.Connect this git project with your Cloudflare Pages and deploy your project. 
 
