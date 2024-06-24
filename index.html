@@ -9,97 +9,133 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css">
   <style>
     body {
-      background: linear-gradient(to bottom right, #e0ffff, #cce0ff);
-      /* 淡蓝色渐变背景 */
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://i0.wp.com/wangwangit001.cachefly.net/wangwangit/image/master/img/%E6%B5%8B%E8%AF%952.jpg') center/cover fixed;
+      /* 设置背景图片 */
+      font-family: 'Arial', sans-serif;
+      /* 设置默认字体 */
+      color: #333;
+      /* 设置默认文本颜色 */
     }
 
     main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       min-height: calc(100vh - 8rem);
-      /* 页面高度减去页眉和页脚的高度 */
+      text-align: center;
     }
 
     .container {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      /* 添加阴影效果 */
+      background-color: rgba(255, 255, 255, 0.8);
+      /* 设置容器背景颜色及透明度 */
+      border-radius: 10px;
+      padding: 40px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+      /* 添加阴影 */
+      max-width: 600px;
     }
 
     input:focus {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-      /* 蓝色聚焦效果 */
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.5);
+      /* 绿色聚焦效果 */
     }
 
     button {
-      background-color: #4299e1;
-      /* 蓝色按钮 */
+      background-color: #22c55e;
+      /* 绿色按钮 */
+      color: white;
       transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: #3182ce;
-      /* 深蓝色悬停效果 */
+      background-color: #16a34a;
+      /* 深绿色悬停效果 */
     }
 
     footer {
-      background-color: #ffffff;
-      /* 白色页脚 */
-      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+      background-color: rgba(255, 255, 255, 0.9);
+      /* 设置页脚背景颜色及透明度 */
+      padding: 20px;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
       /* 添加顶部阴影 */
+    }
+
+    h1 {
+      font-size: 3em;
+      /* 加大标题字体 */
+      font-weight: 700;
+      /* 设置标题字体粗细 */
+      margin-bottom: 20px;
+      color: #22c55e;
+      /* 设置标题颜色 */
     }
 
     .success,
     .error {
-      background-color: #48bb78;
-      /* 绿色成功消息 */
-      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      /* 设置消息字体粗细 */
+    }
+
+    .success {
+      background-color: #d1fae5;
+      /* 浅绿色成功消息 */
+      color: #047857;
     }
 
     .error {
-      background-color: #f56565;
-      /* 红色错误消息 */
+      background-color: #fee2e2;
+      /* 浅红色错误消息 */
+      color: #b91c1c;
     }
   </style>
 </head>
 
 <body>
-  <header class="py-6">
-    <h1 class="text-4xl font-bold text-center text-gray-800">Short</h1>
-  </header>
-
-  <main class="flex items-center justify-center">
-    <div class="container p-8 rounded-lg bg-white max-w-md mx-auto" x-data="app" x-cloak>
-      <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
-      <div class="mb-4">
-        <input placeholder="输入要缩短的网址..." x-model="url" x-ref="url"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline" />
-      </div>
-      <details class="mb-4 border border-gray-300 rounded-md">
-        <summary class="px-4 py-2 cursor-pointer">自定义设置</summary>
-        <div class="px-4 py-2">
-          <input placeholder="自定义短链接 (可选)" x-model="slug"
+  <main>
+    <div class="container">
+      <h1 class="text-3xl font-bold text-gray-800">一只会飞的旺旺</h1>
+      <div x-data="app" x-cloak>
+        <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
+        <div class="mb-4">
+          <input placeholder="输入要缩短的网址..." x-model="url" x-ref="url"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline" />
-          <div class="mt-2">
-            <label for="expiry" class="block text-sm font-medium text-gray-700">过期时间 (可选):</label>
-            <select id="expiry" x-model="expiry"
-              class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-              <option value="">永不过期</option>
-              <option value="1h">1 小时</option>
-              <option value="12h">12 小时</option>
-              <option value="1d">1 天</option>
-              <option value="7d">1 周</option>
-            </select>
-          </div>
         </div>
-      </details>
-      <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-        生成
-      </button>
+        <details class="mb-4 border border-gray-300 rounded-md">
+          <summary class="px-4 py-2 cursor-pointer font-medium">自定义设置</summary>
+          <div class="px-4 py-2">
+            <input placeholder="自定义短链接 (可选)" x-model="slug"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline" />
+            <div class="mt-2">
+              <label for="expiry" class="block text-sm font-medium text-gray-700">过期时间 (可选):</label>
+              <select id="expiry" x-model="expiry"
+                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                <option value="">永不过期</option>
+                <option value="5m">5 分钟</option>
+                <option value="1h">1 小时</option>
+                <option value="12h">12 小时</option>
+                <option value="1d">1 天</option>
+                <option value="7d">1 周</option>
+              </select>
+            </div>
+          </div>
+        </details>
+        <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)"
+          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          生成
+        </button>
+      </div>
     </div>
   </main>
-
-  <footer class="py-4 mt-8 text-center text-gray-500">
+  <footer class="text-gray-600">
     service
   </footer>
 
