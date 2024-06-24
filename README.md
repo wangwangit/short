@@ -1,32 +1,23 @@
-## Projects Introduction
+## 介绍
 
-**Introduction**: Use Cloudflare Pages to create Shortener of URL
+首先感谢原项目 [https://github.com/x-dr/short](https://github.com/x-dr/short) 的开源，本项目是在其基础上进行优化和功能增强的版本。
 
-**My Demo**  : [https://d.igdu.xyz/](https://d.igdu.xyz/);
+**相比原项目，本项目的改进如下：**
 
-**Original author's Demo** : [https://d.131213.xyz/](https://d.131213.xyz/)
+*   **UI 大改造：** 重新设计了用户界面，使其更加美观、现代化，并增强了用户体验。
+*   **过期时间选项：** 增加了短链接过期时间选项，更加灵活。
 
+## 演示
+[https://url.wangwangit.com/](https://url.wangwangit.com/)
 
+## 使用 Cloudflare Pages 部署
 
-## Installatin: Use Cloudflare pages to deploy
-
-### Steps are as follows
-
-1.Fork this project, name it as you like, such as "Short". I have made some change based on the original project [https://github.com/x-dr/short](https://github.com/x-dr/short), such as adding footer of website and the action after shortening the URL. Thanks for the original project and it's author.
-
-2.Connect this git project with your Cloudflare Pages and deploy your project. 
-
-​	2.1 Creat and login in your Cloudflare account;
-
-​	2.2 In Workers and Pages, select pages, create a project,  connect to git, choose your forked git program.
-
-​	2.3 Set up builds and deployments, choose the default setting. Waiting Cloudflare's deploying, then it will be ok.
-
-3.Creat database D1 to store the necessary data. Choose D1, create database, give a name as you like for this D1(such as Shorturl) , create and it's ok for D1 with name Shorturl.
-Refer to [D1's create](https://github.com/x-dr/telegraph-Image/blob/main/docs/manage.md)
-
-4.Go to the workers and pages's console to put and execute the SQL commands. Commands are as follow, just copy them and put them to console station to execute them.
-
+1.  **Fork 本项目**
+2.  **登录 Cloudflare 控制台：** [https://dash.cloudflare.com/](https://dash.cloudflare.com/)
+3.  **创建 Pages 项目：** 在您的 Cloudflare 账户中，选择 `Pages` > `创建项目` > `连接到 Git`。
+4.  **选择仓库并部署：** 选择您 Fork 的项目仓库，在 `设置构建和部署` 部分保持默认设置，然后点击 `保存并部署`。
+5.  **创建 D1 数据库：** 参考 [https://github.com/x-dr/telegraph-Image/blob/main/docs/manage.md](https://github.com/x-dr/telegraph-Image/blob/main/docs/manage.md) 创建一个 D1 数据库。
+6.  **创建数据库表：** 在 D1 数据库控制台中执行以下 SQL 命令创建表：
 ```sql
 DROP TABLE IF EXISTS links;
 CREATE TABLE IF NOT EXISTS links (
@@ -36,7 +27,8 @@ CREATE TABLE IF NOT EXISTS links (
   `ua` text,
   `ip` text,
   `status` int,
-  `create_time` DATE
+  `create_time` DATE,
+  `expires_at` timestamp  -- 添加过期时间字段
 );
 DROP TABLE IF EXISTS logs;
 CREATE TABLE IF NOT EXISTS logs (
@@ -48,38 +40,23 @@ CREATE TABLE IF NOT EXISTS logs (
   `ip` text ,
   `create_time` DATE
 );
-
 ```
 
-5.Bind your project with D1 database. In your Workers and pages, choose your forked project Short, click as follow:
-
-Setting->->Function->->D1 database bindings->->Edit bingds->->Variable name, You must put DB->->Namespace, put your D1's name, such as Shorturl->->Binding and Done well.
-
-6.Redeploy the project, otherwise you will see the errors. Methods: In your Workers and pages, choose your forked project Short, Deployments, Redeploy the project.
-
-7.If you like, your project could works well with Cloudflare's subdomain, such as short-998.pages.dev. If you want to Custom the project domain, in Cloudflare's forked project,choose the custom domian setting, then bind your domain. Then you could surf your project with your domain, such as d.igdud.xyz.
-
-8.Enjoy it. If you like or it helps you, please star it. Thanks. 
-
-**9.API**
-
-#### Shorturl create
-
-```bash
+## API
+短链接生成
+```
 # POST /create
-curl -X POST -H "Content-Type: application/json" -d '{"url":"https://igdu.xyz"}' https://d.igdu.xyz/create
+curl -X POST -H "Content-Type: application/json" -d '{"url":"https://url.wangwangit.com"}' https://url.wangwangit.com/create
 
-# Dedicated slug
-curl -X POST -H "Content-Type: application/json" -d '{"url":"https://igdu.xyz","slug":"scxs"}' https://d.igdu.xyz/create
+# 指定 slug
+curl -X POST -H "Content-Type: application/json" -d '{"url":"https://url.wangwangit.com","slug":"example"}' https://url.wangwangit.com/create
 
-```
+# 设置过期时间
+curl -X POST -H "Content-Type: application/json" -d '{"url":"https://url.wangwangit.com", "expiry": "5m"}' https://url.wangwangit.com/create
 
-
-> response:
-
-```json
+# 响应示例
 {
   "slug": "<slug>",
-  "link": "http://d.igdu.xyz/<slug>"
+  "link": "http://d.131213.xyz/<slug>"
 }
 ```
