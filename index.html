@@ -1,163 +1,162 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="asset/img/favicon.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>一只会飞的旺旺</title>
-    <style>
-        :root {
-            --color-primary: #007bff; /* 主色调为深蓝色 */
-            --color-secondary: #ffa500; /* 辅助色为橙色 */
-            --color-primary-dark: #0056b3; /* 深蓝色加深 */
-            --color-primary-alpha: #007bff50; /* 主色调半透明 */
-            --body-color: #343a40; /* 正文字体颜色 */
-            --body-bg: #ffffff; /* 背景颜色改为纯白 */
-            --border-color: #dee2e6;
-        }
+  <meta charset="UTF-8" />
+  <link rel="icon" href="asset/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>一只会飞的旺旺</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #e0ffff, #cce0ff);
+      /* 淡蓝色渐变背景 */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        body {
-            max-width: 30rem;
-            margin-left: auto;
-            margin-right: auto;
-            padding-left: 2rem;
-            padding-right: 2rem;
-            color: var(--body-color);
-            background: var(--body-bg);
-            font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-            line-height: 1.5;
-        }
+    main {
+      min-height: calc(100vh - 8rem);
+      /* 页面高度减去页眉和页脚的高度 */
+    }
 
-        a {
-            color: var(--color-primary);
-            text-decoration: none;
-            transition: color .3s;
-        }
+    .container {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* 添加阴影效果 */
+    }
 
-        a:hover {
-            text-decoration: underline;
-        }
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+      /* 蓝色聚焦效果 */
+    }
 
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 300;
-            text-align: center;
-            opacity: .9;
-        }
+    button {
+      background-color: #4299e1;
+      /* 蓝色按钮 */
+      transition: background-color 0.3s ease;
+    }
 
-        input {
-            display: block;
-            width: 100%;
-            padding: .5rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: .25rem;
-            box-sizing: border-box;
-            color: #33404d;
-            font-size: 1rem;
-            transition: border .3s, box-shadow .3s;
-        }
+    button:hover {
+      background-color: #3182ce;
+      /* 深蓝色悬停效果 */
+    }
 
-        input:focus {
-            box-shadow: 0 0 0 .25rem var(--color-primary-alpha);
-            border-color: var(--color-primary);
-        }
+    footer {
+      background-color: #ffffff;
+      /* 白色页脚 */
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+      /* 添加顶部阴影 */
+    }
 
-        button {
-            appearance: none;
-            display: block;
-            width: 100%;
-            padding: .5rem .75rem;
-            margin-top: 1rem;
-            border: 1px solid var(--color-primary);
-            border-radius: .25rem;
-            background: var(--color-primary);
-            color: #fff;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color .3s, border-color .3s;
-        }
+    .success,
+    .error {
+      background-color: #48bb78;
+      /* 绿色成功消息 */
+      color: white;
+    }
 
-        button:hover {
-            background-color: var(--color-secondary);
-            border-color: var(--color-secondary);
-        }
-
-        footer {
-            padding: 1rem;
-            text-align: center;
-            border-top: 1px solid var(--border-color);
-            opacity: .8;
-        }
-    </style>
+    .error {
+      background-color: #f56565;
+      /* 红色错误消息 */
+    }
+  </style>
 </head>
+
 <body>
-    <header><h1>一只会飞的旺旺</h1></header>
-    <main x-data="app" x-cloak>
-        <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
-        <input placeholder="请输入您的网址。" x-model="url" x-ref="url" />
-        <details>
-            <summary>自定义设置</summary>
-            <div>
-                <input placeholder="自定义短链接" x-model="slug" />
-                <small>Slug 为自定义的短链接 ID。</small>
-            </div>
-        </details>
-        <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)">生成短链接</button>
-    </main>
-    <footer>
-        <a href="https://www.wangwangit.com">一只会飞的旺旺</a>
-    </footer>
-    <script src="asset/js/alpine.js"></script>
-    <script>
-        const app = {
-            url: '',
-            slug: '',
-        alert: null,
-        loading: false,
-        isValidated () {
-          return !/^https?:\/\/.{3,}/.test(this.url)
-        },
-        submit ($refs, $nextTick) {
-          if (!this.url) {
-            this.alert = { type: 'error', message: 'No url, Input first' }
-            return
-          }
-          if (this.isValidated()) {
-            this.alert = { type: 'error', message: 'Illegal url' }
-            return
-          }
+  <header class="py-6">
+    <h1 class="text-4xl font-bold text-center text-gray-800">Short</h1>
+  </header>
 
-          this.alert = null
-          this.loading = true
+  <main class="flex items-center justify-center">
+    <div class="container p-8 rounded-lg bg-white max-w-md mx-auto" x-data="app" x-cloak>
+      <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
+      <div class="mb-4">
+        <input placeholder="输入要缩短的网址..." x-model="url" x-ref="url"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline" />
+      </div>
+      <details class="mb-4 border border-gray-300 rounded-md">
+        <summary class="px-4 py-2 cursor-pointer">自定义设置</summary>
+        <div class="px-4 py-2">
+          <input placeholder="自定义短链接 (可选)" x-model="slug"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline" />
+          <div class="mt-2">
+            <label for="expiry" class="block text-sm font-medium text-gray-700">过期时间 (可选):</label>
+            <select id="expiry" x-model="expiry"
+              class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+              <option value="">永不过期</option>
+              <option value="1h">1 小时</option>
+              <option value="12h">12 小时</option>
+              <option value="1d">1 天</option>
+              <option value="7d">1 周</option>
+            </select>
+          </div>
+        </div>
+      </details>
+      <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        生成
+      </button>
+    </div>
+  </main>
 
-          const body = { url: this.url }
-          if (this.slug) body.slug = this.slug
+  <footer class="py-4 mt-8 text-center text-gray-500">
+    service
+  </footer>
 
-          fetch('/create', {
-            method: 'post',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(body)
-          })
-            .then(res => res.json())
-            .then(res => {
-              this.loading = false;
-              if (res.message) {
-                this.alert = { type: 'error', message: res.message };
-                return
-              }
-
-              this.url = res.link
-
-              $nextTick(() => {
-                $refs.url.select();
-                const successful = document.execCommand('copy');
-                this.alert = { type: 'success', message: successful ? 'Link copied!' : 'Failed to copy'};
-              });
-             })
-            .catch(e => { this.loading = false; 
-                           this.alert = { type: 'error', message: e.message }; });
+  <script src="asset/js/alpine.js"></script>
+  <script>
+    const app = {
+      url: '',
+      slug: '',
+      expiry: '', // 添加过期时间属性
+      alert: null,
+      loading: false,
+      isValidated() {
+        return !/^https?:\/\/.{3,}/.test(this.url)
+      },
+      submit($refs, $nextTick) {
+        if (!this.url) {
+          this.alert = { type: 'error', message: '缺少必需的参数：url。' }
+          return
         }
+
+        if (this.isValidated()) {
+          this.alert = { type: 'error', message: '非法格式：url。' }
+          return
+        }
+
+        this.alert = null
+        this.loading = true
+
+        const body = { url: this.url, slug: this.slug, expiry: this.expiry }
+
+        fetch('/create', {
+          method: 'post',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body)
+        })
+          .then(res => res.json())
+          .then(res => {
+            this.loading = false
+            if (res.message) {
+              this.alert = { type: 'error', message: res.message }
+              return
+            }
+
+            this.url = res.link
+
+            $nextTick(() => {
+              $refs.url.select()
+              this.alert = { type: 'success', message: `链接 ${document.execCommand('Copy') ? '复制' : '生成'} ` }
+            })
+          })
+          .catch(e => {
+            this.alert = { type: 'error', message: e.message }
+            this.loading = false
+          })
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
+
 </html>
