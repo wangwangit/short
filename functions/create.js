@@ -124,9 +124,12 @@ export async function onRequest(context) {
         if (expiry) {
             const expiryValue = parseInt(expiry.slice(0, -1));
             const expiryUnit = expiry.slice(-1);
-
+        
             const now = new Date();
             switch (expiryUnit) {
+                case 'm': // 添加对分钟的处理
+                    now.setMinutes(now.getMinutes() + expiryValue);
+                    break;
                 case 'h':
                     now.setHours(now.getHours() + expiryValue);
                     break;
