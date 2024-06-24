@@ -25,7 +25,7 @@ export async function onRequestGet(context) {
 
     const slug = params.id;
 
-    const Url = await env.DB.prepare(`SELECT url FROM links where slug = '${slug}'`).first()
+    const Url = await env.DB.prepare(`SELECT * FROM links where slug = '${slug}'`).first()
 
     if (!Url) {
         return new Response(page404, {
@@ -35,12 +35,22 @@ export async function onRequestGet(context) {
             }
         });
     } else {
+        // 检查链接是否过期
+        if (Url.expires_at && new Date(Url.expires_at) < new Date()) {
+            // 链接已过期
+            return new Response('链接已过期', {
+                status: 404,
+                headers: {
+                    "content-type": "text/html;charset=UTF-8",
+                }
+            });
+        }
         try {
             const info = await env.DB.prepare(`INSERT INTO logs (url, slug, ip,referer,  ua, create_time) 
             VALUES ('${Url.url}', '${slug}', '${clientIP}','${Referer}', '${userAgent}', '${formattedDate}')`).run()
             // console.log(info);
             return Response.redirect(Url.url, 302);
-            
+
         } catch (error) {
             console.log(error);
             return Response.redirect(Url.url, 302);
