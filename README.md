@@ -6,6 +6,7 @@
 
 *   **UI 大改造：** 重新设计了用户界面，使其更加美观、现代化，并增强了用户体验。
 *   **过期时间选项：** 增加了短链接过期时间选项，更加灵活。
+*   AI优化
 
 ## 演示
 [https://url.wangwangit.com/](https://url.wangwangit.com/)
