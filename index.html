@@ -5,146 +5,119 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="asset/img/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>short</title>
+  <title>ShortLink - 简洁高效的短链接服务</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
     body {
-      background: url('https://i0.wp.com/wangwangit001.cachefly.net/wangwangit/image/master/img/%E6%B5%8B%E8%AF%952.jpg') center/cover fixed;
-      /* 设置背景图片 */
-      font-family: 'Arial', sans-serif;
-      /* 设置默认字体 */
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Poppins', sans-serif;
       color: #333;
-      /* 设置默认文本颜色 */
     }
 
-    main {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: calc(100vh - 8rem);
-      text-align: center;
-    }
-
-    .container {
-      background-color: rgba(255, 255, 255, 0.8);
-      /* 设置容器背景颜色及透明度 */
+    .glass-container {
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       border-radius: 10px;
-      padding: 40px;
-      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-      /* 添加阴影 */
-      max-width: 600px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
     }
 
-    input:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.5);
-      /* 绿色聚焦效果 */
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 
-    button {
-      background-color: #22c55e;
-      /* 绿色按钮 */
-      color: white;
-      transition: background-color 0.3s ease;
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: .5;
+      }
     }
 
-    button:hover {
-      background-color: #16a34a;
-      /* 深绿色悬停效果 */
+    .hover-scale {
+      transition: transform 0.3s ease-in-out;
     }
 
-    footer {
-      background-color: rgba(255, 255, 255, 0.9);
-      /* 设置页脚背景颜色及透明度 */
-      padding: 20px;
-      text-align: center;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
-      /* 添加顶部阴影 */
-    }
-
-    h1 {
-      font-size: 3em;
-      /* 加大标题字体 */
-      font-weight: 700;
-      /* 设置标题字体粗细 */
-      margin-bottom: 20px;
-      color: #22c55e;
-      /* 设置标题颜色 */
-    }
-
-    .success,
-    .error {
-      padding: 10px 20px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-      font-weight: 600;
-      /* 设置消息字体粗细 */
-    }
-
-    .success {
-      background-color: #d1fae5;
-      /* 浅绿色成功消息 */
-      color: #047857;
-    }
-
-    .error {
-      background-color: #fee2e2;
-      /* 浅红色错误消息 */
-      color: #b91c1c;
+    .hover-scale:hover {
+      transform: scale(1.05);
     }
   </style>
 </head>
 
-<body>
-  <main>
-    <div class="container">
-      <h1 class="text-3xl font-bold text-gray-800">shor</h1>
-      <div x-data="app" x-cloak>
-        <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
-        <div class="mb-4">
-          <input placeholder="输入要缩短的网址..." x-model="url" x-ref="url"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline" />
-        </div>
-        <details class="mb-4 border border-gray-300 rounded-md">
-          <summary class="px-4 py-2 cursor-pointer font-medium">自定义设置</summary>
-          <div class="px-4 py-2">
-            <input placeholder="自定义短链接 (可选)" x-model="slug"
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline" />
-            <div class="mt-2">
-              <label for="expiry" class="block text-sm font-medium text-gray-700">过期时间 (可选):</label>
-              <select id="expiry" x-model="expiry"
-                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                <option value="">永不过期</option>
-                <option value="5m">5 分钟</option>
-                <option value="1h">1 小时</option>
-                <option value="12h">12 小时</option>
-                <option value="1d">1 天</option>
-                <option value="7d">1 周</option>
-              </select>
-            </div>
-          </div>
-        </details>
-        <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)"
-          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-          生成
-        </button>
+<body class="min-h-screen flex items-center justify-center px-4">
+  <div class="glass-container p-8 w-full max-w-md">
+    <h1 class="text-4xl font-bold text-white text-center mb-8">Short<span class="text-yellow-300">Link</span></h1>
+    
+    <div x-data="app" x-cloak>
+      <div x-show="alert" x-transition:enter="transition ease-out duration-300"
+           x-transition:enter-start="opacity-0 transform scale-90"
+           x-transition:enter-end="opacity-100 transform scale-100"
+           x-transition:leave="transition ease-in duration-300"
+           x-transition:leave-start="opacity-100 transform scale-100"
+           x-transition:leave-end="opacity-0 transform scale-90"
+           :class="alert?.type === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'"
+           class="border-l-4 p-4 mb-4 rounded-r">
+        <p x-text="alert?.message"></p>
       </div>
-    </div>
-  </main>
-  <footer class="text-gray-600">
-     service
-  </footer>
 
-  <script src="asset/js/alpine.js"></script>
+      <div class="mb-4">
+        <div class="relative">
+          <input placeholder="输入要缩短的网址..." x-model="url" x-ref="url"
+                 class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-600" />
+          <i class="fas fa-link absolute right-3 top-3 text-gray-400"></i>
+        </div>
+      </div>
+
+      <details class="mb-4 border border-gray-300 rounded-md overflow-hidden hover-scale">
+        <summary class="px-4 py-2 cursor-pointer font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors duration-200">
+          高级选项 <i class="fas fa-cog ml-2"></i>
+        </summary>
+        <div class="px-4 py-3 bg-white">
+          <input placeholder="自定义短链接 (可选)" x-model="slug"
+                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-600 mb-3" />
+          <div>
+            <label for="expiry" class="block text-sm font-medium text-gray-700 mb-1">过期时间 (可选):</label>
+            <select id="expiry" x-model="expiry"
+                    class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 sm:text-sm rounded-md">
+              <option value="">永不过期</option>
+              <option value="5m">5 分钟</option>
+              <option value="1h">1 小时</option>
+              <option value="12h">12 小时</option>
+              <option value="1d">1 天</option>
+              <option value="7d">1 周</option>
+            </select>
+          </div>
+        </div>
+      </details>
+
+      <button :class="{ 'opacity-50 cursor-not-allowed': loading || isValidated() }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)"
+              class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+        <span x-show="!loading">生成短链接 <i class="fas fa-arrow-right ml-2"></i></span>
+        <span x-show="loading" class="flex items-center justify-center">
+          <i class="fas fa-spinner fa-spin mr-2"></i> 处理中...
+        </span>
+      </button>
+    </div>
+
+    <div class="mt-8 text-center text-white text-sm">
+      <p>快速、安全、可靠的短链接服务</p>
+      <p class="mt-2">
+        <i class="fas fa-shield-alt mr-2"></i> 安全加密
+        <i class="fas fa-tachometer-alt mx-2"></i> 高速响应
+        <i class="fas fa-chart-line ml-2"></i> 详细统计
+      </p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   <script>
     const app = {
       url: '',
       slug: '',
-      expiry: '', // 添加过期时间属性
+      expiry: '',
       alert: null,
       loading: false,
       isValidated() {
@@ -152,19 +125,19 @@
       },
       submit($refs, $nextTick) {
         if (!this.url) {
-          this.alert = { type: 'error', message: '缺少必需的参数：url。' }
-          return
+          this.showAlert('error', '请输入要缩短的网址。');
+          return;
         }
 
         if (this.isValidated()) {
-          this.alert = { type: 'error', message: '非法格式：url。' }
-          return
+          this.showAlert('error', '请输入有效的网址。');
+          return;
         }
 
-        this.alert = null
-        this.loading = true
+        this.alert = null;
+        this.loading = true;
 
-        const body = { url: this.url, slug: this.slug, expiry: this.expiry }
+        const body = { url: this.url, slug: this.slug, expiry: this.expiry };
 
         fetch('/create', {
           method: 'post',
@@ -173,25 +146,40 @@
         })
           .then(res => res.json())
           .then(res => {
-            this.loading = false
+            this.loading = false;
             if (res.message) {
-              this.alert = { type: 'error', message: res.message }
-              return
+              this.showAlert('error', res.message);
+              return;
             }
 
-            this.url = res.link
+            this.url = res.link;
 
             $nextTick(() => {
-              $refs.url.select()
-              this.alert = { type: 'success', message: `链接 ${document.execCommand('Copy') ? '复制' : '生成'} ` }
-            })
+              $refs.url.select();
+              this.copyToClipboard(res.link);
+              this.showAlert('success', '短链接已生成并复制到剪贴板！');
+            });
           })
           .catch(e => {
-            this.alert = { type: 'error', message: e.message }
-            this.loading = false
-          })
+            this.showAlert('error', '生成短链接时出错，请稍后重试。');
+            this.loading = false;
+          });
+      },
+      showAlert(type, message) {
+        this.alert = { type, message };
+        setTimeout(() => {
+          this.alert = null;
+        }, 5000);
+      },
+      copyToClipboard(text) {
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
       }
-    }
+    };
   </script>
 </body>
 
