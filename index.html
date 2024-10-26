@@ -109,6 +109,13 @@
           <input placeholder="输入要缩短的网址..." x-model="url" x-ref="url"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline" />
         </div>
+        <!-- 在 x-data="app" 下的 input url 后添加 -->
+        <div class="mb-4">
+          <input type="password" 
+                placeholder="请输入访问密码..." 
+                x-model="password"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline" />
+        </div>
         <details class="mb-4 border border-gray-300 rounded-md">
           <summary class="px-4 py-2 cursor-pointer font-medium">自定义设置</summary>
           <div class="px-4 py-2">
@@ -145,6 +152,7 @@
       url: '',
       slug: '',
       expiry: '', // 添加过期时间属性
+      password: '', // 添加访问密码属性
       alert: null,
       loading: false,
       isValidated() {
@@ -153,6 +161,11 @@
       submit($refs, $nextTick) {
         if (!this.url) {
           this.alert = { type: 'error', message: '缺少必需的参数：url。' }
+          return
+        }
+        
+        if (!this.password) {
+          this.alert = { type: 'error', message: '请输入访问密码。' }
           return
         }
 
@@ -164,7 +177,13 @@
         this.alert = null
         this.loading = true
 
-        const body = { url: this.url, slug: this.slug, expiry: this.expiry }
+
+        const body = { 
+      url: this.url, 
+      slug: this.slug, 
+      expiry: this.expiry,
+      password: this.password 
+    }
 
         fetch('/create', {
           method: 'post',
