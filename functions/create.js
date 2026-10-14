@@ -84,11 +84,11 @@ export async function onRequest(context) {
 
         // 如果自定义slug
         if (slug) {
-            const existUrl = await env.DB.prepare(`SELECT url as existUrl FROM links where slug = '${slug}'`).first()
+            const existUrl = await env.DB.prepare('SELECT url as existUrl FROM links WHERE slug = ?').bind(slug).first()
 
             // url & slug 是一样的。
             if (existUrl && existUrl.existUrl === url) {
-                return Response.json({ slug, link: `${origin}/${slug2}` }, {
+                return Response.json({ slug, link: `${origin}/${slug}` }, {
                     headers: corsHeaders,
                     status: 200
                 })
@@ -104,7 +104,7 @@ export async function onRequest(context) {
         }
 
         // 目标 url 已存在
-        const existSlug = await env.DB.prepare(`SELECT slug as existSlug FROM links where url = '${url}'`).first()
+        const existSlug = await env.DB.prepare('SELECT slug as existSlug FROM links WHERE url = ?').bind(url).first()
 
         // url 存在且没有自定义 slug
         if (existSlug && !slug) {
@@ -148,8 +148,9 @@ export async function onRequest(context) {
             }
             expiresAt = now.toISOString();
         }
-        const info = await env.DB.prepare(`INSERT INTO links (url, slug, ip, status, ua, create_time,expires_at) 
-        VALUES ('${url}', '${slug2}', '${clientIP}',1, '${userAgent}', '${formattedDate}','${expiresAt}')`).run()
+        const info = await env.DB.prepare(
+            'INSERT INTO links (url, slug, ip, status, ua, create_time, expires_at) VALUES (?, ?, ?, 1, ?, ?, ?)'
+        ).bind(url, slug2, clientIP, userAgent, formattedDate, expiresAt).run()
 
         return Response.json({ slug: slug2, link: `${origin}/${slug2}` }, {
             headers: corsHeaders,

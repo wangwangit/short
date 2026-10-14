@@ -25,7 +25,7 @@ export async function onRequestGet(context) {
 
     const slug = params.id;
 
-    const Url = await env.DB.prepare(`SELECT * FROM links where slug = '${slug}'`).first()
+    const Url = await env.DB.prepare('SELECT * FROM links WHERE slug = ?').bind(slug).first()
 
     if (!Url) {
         return new Response(page404, {
@@ -46,8 +46,9 @@ export async function onRequestGet(context) {
             });
         }
         try {
-            const info = await env.DB.prepare(`INSERT INTO logs (url, slug, ip,referer,  ua, create_time) 
-            VALUES ('${Url.url}', '${slug}', '${clientIP}','${Referer}', '${userAgent}', '${formattedDate}')`).run()
+            const info = await env.DB.prepare(
+                'INSERT INTO logs (url, slug, ip, referer, ua, create_time) VALUES (?, ?, ?, ?, ?, ?)'
+            ).bind(Url.url, slug, clientIP, Referer, userAgent, formattedDate).run()
             // console.log(info);
             return Response.redirect(Url.url, 302);
 
