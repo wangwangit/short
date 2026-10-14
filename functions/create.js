@@ -17,14 +17,16 @@ function generateRandomString(length) {
 }
 
 export async function onRequest(context) {
+    const corsHeaders = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '86400', // 24小时
+    };
+
     if (context.request.method === 'OPTIONS') {
         return new Response(null, {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Max-Age': '86400', // 24小时
-            },
+            headers: corsHeaders,
         });
     }
     const { request, env } = context;
@@ -45,20 +47,33 @@ export async function onRequest(context) {
     };
     const timedata = new Date();
     const formattedDate = new Intl.DateTimeFormat('zh-CN', options).format(timedata);
-    const { url, slug, expiry, password } = await request.json(); // 获取过期时间
-        // 验证密码
-        if (!password || password !== context.env.ACCESS_PASSWORD) {
-            return Response.json({ message: '访问密码错误' }, {
-                headers: corsHeaders,
-                status: 403
-            });
-        }
-    const corsHeaders = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Max-Age': '86400', // 24 hours
-    };
-    if (!url) return Response.json({ message: 'Missing required parameter: url.' });
+
+    let body;
+    try {
+        body = await request.json();
+    } catch {
+        return Response.json({ message: 'Invalid JSON body' }, {
+            headers: corsHeaders,
+            status: 400
+        });
+    }
+
+    const { url, slug, expiry, password } = body || {};
+
+    // 验证密码
+    if (!password || password !== env.ACCESS_PASSWORD) {
+        return Response.json({ message: '访问密码错误' }, {
+            headers: corsHeaders,
+            status: 403
+        });
+    }
+
+    if (!url) {
+        return Response.json({ message: 'Missing required parameter: url.' }, {
+            headers: corsHeaders,
+            status: 400
+        });
+    }
 
     // url格式检查
     if (!/^https?:\/\/.{3,}/.test(url)) {
